@@ -7,7 +7,7 @@ pipeline {
                 //git clone  
                 deleteDir()
                 echo 'Clone the latest code from the code-base'
-                sh 'git clone https://github.com/nareshthota247/loan-repayment-plan-generator.git'       
+                sh 'git clone https://github.com/nareshthota247/tick-statistics.git'       
             }
             
         }
@@ -15,7 +15,7 @@ pipeline {
             steps {
                 //Execute testcases 
                 echo 'Execute test cases'
-                dir("loan-repayment-plan-generator"){
+                dir("tick-statistics"){
                     sh 'mvn clean test' 
                 }               
             }
@@ -24,7 +24,7 @@ pipeline {
         stage("Maven Build") {
             steps {
                 echo 'Execute Maven Build'
-                dir("loan-repayment-plan-generator"){
+                dir("tick-statistics"){
                     sh 'mvn clean package'
                 }
             }
@@ -33,8 +33,8 @@ pipeline {
         stage("Docker Build") {            
             steps {
                 echo 'Execute Docker Build'
-                dir("loan-repayment-plan-generator"){
-                    sh "docker build -t loan-repayment-plan-generator:\"${env.BUILD_NUMBER}\" . "
+                dir("tick-statistics"){
+                    sh "docker build -t tick-statistics:\"${env.BUILD_NUMBER}\" . "
                     //sh 'docker push'
                     echo "Check the Docker image"
                     sh 'docker images'
@@ -44,8 +44,8 @@ pipeline {
         }
         stage("Deployment") {
             steps {
-                dir("loan-repayment-plan-generator"){
-                    sh "docker run -d -p 89:8082 loan-repayment-plan-generator:\"${env.BUILD_NUMBER}\""
+                dir("tick-statistics"){
+                    sh "docker run -d -p 89:8082 tick-statistics:\"${env.BUILD_NUMBER}\""
                 }
             }            
         }
