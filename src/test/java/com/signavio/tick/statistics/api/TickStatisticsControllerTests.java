@@ -214,6 +214,22 @@ public class TickStatisticsControllerTests {
 		.andExpect(jsonPath("$.min").value("140.0"))
 		.andExpect(jsonPath("$.count").value("2")).andReturn();
 	}
+
+	@Test
+	public void test_getInstrumentStatistics_validtime_multiple1() throws Exception {
+		mockMvc.perform(post("/api/ticks").contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsBytes(new Tick("IBM.N", 150.00, calender.getTime().getTime()))))
+				.andExpect(status().isCreated()).andReturn();
+		mockMvc.perform(post("/api/ticks").contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsBytes(new Tick("IBM.N", 140.00, calender.getTime().getTime()))))
+				.andExpect(status().isCreated()).andReturn();
+		mockMvc.perform(get("/api/statistics/IBM.N"))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.avg").value("145.0"))
+		.andExpect(jsonPath("$.max").value("150.0"))
+		.andExpect(jsonPath("$.min").value("140.0"))
+		.andExpect(jsonPath("$.count").value("2")).andReturn();
+	}
 	
 	@Test
 	public void test_getInstrumentStatistics_validtime_multiple_invalidtime() throws Exception {
