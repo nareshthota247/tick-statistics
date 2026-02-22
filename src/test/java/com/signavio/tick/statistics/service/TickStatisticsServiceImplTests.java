@@ -71,5 +71,14 @@ public class TickStatisticsServiceImplTests {
 		assertEquals(1,tickList.size());
 	}
 	
+	@Test
+	public void test_addTick1() throws Exception {
+		Tick tick = new Tick("IBM.N", 143.86, calender.getTime().getTime());
+		tick = tickStatisticsServiceImpl.addTick(tick);
+		Map<String, List<Tick>> tickMap = tickStatisticsServiceImpl.getAllTicks();
+		List<Tick> tickList = tickMap.get("IBM.N");
+		assertEquals(1,tickList.size());
+	}
+	
 	
 }
